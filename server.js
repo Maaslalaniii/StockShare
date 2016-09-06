@@ -12,14 +12,20 @@ app.set('view engine', 'hbs')
 
 // Middleware
 app.use(stormpath.init(app, {
-  website: true,
-  web: {
-  register: {
-    autoLogin: true,
-    nextUri: '/'
-  }
-}
+	website: true,
+	expand: {
+		customData: true
+	},
+	web: {
+		register: {
+			autoLogin: true,
+			nextUri: '/'
+		}
+	}
 }))
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Static files
 app.use(express.static(__dirname + '/assets'))
@@ -29,5 +35,5 @@ app.use('/', router)
 
 // Listen
 app.on('stormpath.ready', () =>
-  app.listen(process.env.PORT || 3000, () =>
-    console.log('Listening...')))
+	app.listen(process.env.PORT || 3000, () =>
+		console.log('Listening...')))
